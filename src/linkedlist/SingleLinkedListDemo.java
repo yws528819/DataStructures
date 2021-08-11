@@ -2,6 +2,34 @@ package linkedlist;
 
 public class SingleLinkedListDemo {
     public static void main(String[] args) {
+        SingleLinkedList singleLinkedList = new SingleLinkedList();
+        //创建节点
+        HeroNode heroNode1 = new HeroNode(1, "宋江", "及时雨");
+        HeroNode heroNode2 = new HeroNode(2, "卢俊义", "玉麒麟");
+        HeroNode heroNode3 = new HeroNode(3, "吴用", "智多星");
+        HeroNode heroNode4= new HeroNode(4, "林冲", "豹子头");
+        //加入节点
+        // singleLinkedList.add(heroNode3);
+        // singleLinkedList.add(heroNode4);
+        // singleLinkedList.add(heroNode1);
+        // singleLinkedList.add(heroNode2);
+        //加入节点并且实现排序
+        singleLinkedList.addByOrder(heroNode3);
+        singleLinkedList.addByOrder(heroNode4);
+        singleLinkedList.addByOrder(heroNode1);
+        singleLinkedList.addByOrder(heroNode2);
+
+
+        //修改节点
+        HeroNode h2 = new HeroNode(2, "小卢", "玉麒麟~~~");
+        singleLinkedList.update(2, h2);
+
+        //删除节点
+        singleLinkedList.delete(2);
+        singleLinkedList.delete(3);
+
+        //展示节点
+        singleLinkedList.list();
 
     }
 }
