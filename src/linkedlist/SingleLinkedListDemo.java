@@ -31,6 +31,12 @@ public class SingleLinkedListDemo {
         //展示节点
         singleLinkedList.list();
 
+        //链表的长度
+        System.out.println("链表的长度：" + singleLinkedList.count());
+
+        //查找倒数第n个节点
+        System.out.println("倒数第2个节点为：" + singleLinkedList.findLastIndexNode(2));
+
     }
 }
 
@@ -182,6 +188,53 @@ class SingleLinkedList {
 
         }
     }
+
+    /**
+     * 返回链表长度
+     * @return
+     */
+    public int count() {
+        if (head.next == null) {
+            return 0;
+        }
+        HeroNode curNode = head.next;
+        int i = 0;
+        while (curNode != null) {
+            i++;
+            curNode = curNode.next;
+        }
+        return i;
+    }
+
+
+    /**
+     * 寻找倒数第几个节点
+     * @param no
+     * @return
+     */
+    public HeroNode findLastIndexNode(int no) {
+        if (head.next == null) {
+            return null;
+        }
+
+        //1.先遍历整个链表，统计链表长度
+        int count = count();
+
+        //2.遍历获得（总长度-倒数位置）的节点
+        //倒数位置要正常
+        if (no < 0 || no > count) {
+            return null;
+        }
+
+        HeroNode cur = head.next;
+        for (int i=0; i<count-no; i++) {
+            cur = cur.next;
+        }
+
+        return cur;
+    }
+
+
 }
 
 
