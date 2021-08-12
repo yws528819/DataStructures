@@ -25,8 +25,8 @@ public class SingleLinkedListDemo {
         singleLinkedList.update(2, h2);
 
         //删除节点
-        singleLinkedList.delete(2);
-        singleLinkedList.delete(3);
+        // singleLinkedList.delete(2);
+        // singleLinkedList.delete(3);
 
         //展示节点
         singleLinkedList.list();
@@ -36,6 +36,13 @@ public class SingleLinkedListDemo {
 
         //查找倒数第n个节点
         System.out.println("倒数第2个节点为：" + singleLinkedList.findLastIndexNode(2));
+
+        //反转链表
+        System.out.println("==========反转链表====>");
+        singleLinkedList.reverseLinkedList1();
+        //展示节点
+        singleLinkedList.list();
+        System.out.println("=====================");
 
     }
 }
@@ -232,6 +239,30 @@ class SingleLinkedList {
         }
 
         return cur;
+    }
+
+
+    /**
+     * 将单链表反转（头节点插入法）
+     */
+    public void reverseLinkedList1() {
+        //新的头节点
+        HeroNode revHead = new HeroNode(0, "", "");
+
+        HeroNode cur = head.next;
+        HeroNode nextNode = null;
+        //遍历当前链表
+        while (cur != null) {
+            //先拿到下个节点
+            nextNode = cur.next;
+            cur.next = revHead.next;
+            revHead.next = cur;
+            //当前节点换成下个节点
+            cur = nextNode;
+        }
+
+        //将原来的头节点的下一个节点指向反转后头节点的下一个节点
+        head.next = revHead.next;
     }
 
 
