@@ -26,8 +26,8 @@ public class DoubleLinkedListDemo {
         singleLinkedList.update(2, h2);
 
         //删除节点
-        // singleLinkedList.delete(4);
-        // singleLinkedList.delete(2);
+        singleLinkedList.delete(4);
+        singleLinkedList.delete(2);
 
         //展示节点
         singleLinkedList.list();
@@ -85,24 +85,13 @@ class DoubleLinkedList {
     }
 
     /**
-     * 排序插入，与单链表会有点区别
+     * 排序插入
      * @param heroNode
      */
     public void addByOrder(HeroNode2 heroNode) {
-
         HeroNode2 temp = head;
         boolean flag = false;
-        while (true) {
-            //先比较插入的节点与当前节点的大小，如果当前节点如果为头节点直接跳过
-            if (temp.pre != null && heroNode.no > temp.no) {
-                temp.pre.next = heroNode;
-                heroNode.pre = temp.pre;
-
-                heroNode.next = temp;
-                temp.pre = heroNode;
-                break;
-            }
-
+        while(true) {
             //空链表直接添加
             if (temp.next == null) {
                 temp.next = heroNode;
@@ -110,12 +99,19 @@ class DoubleLinkedList {
                 break;
             }
 
-            if (heroNode.no == temp.no) {//说明希望添加的HeroNode2的编号已然存在
+            if (heroNode.no == temp.next.no) {//说明希望添加的heroNode的编号已然存在
                 flag = true;
                 break;
             }
 
+            if (heroNode.no > temp.next.no) {
+                heroNode.next = temp.next;
+                heroNode.pre = temp;
 
+                temp.next.pre = heroNode;
+                temp.next = heroNode;
+                break;
+            }
             temp = temp.next;
         }
 
