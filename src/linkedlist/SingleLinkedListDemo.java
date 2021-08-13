@@ -1,5 +1,7 @@
 package linkedlist;
 
+import java.util.Stack;
+
 public class SingleLinkedListDemo {
     public static void main(String[] args) {
         SingleLinkedList singleLinkedList = new SingleLinkedList();
@@ -42,7 +44,20 @@ public class SingleLinkedListDemo {
         singleLinkedList.reverseLinkedList1();
         //展示节点
         singleLinkedList.list();
+
+
+        //逆序打印节点
+        System.out.println("==========逆序打印====>");
+        singleLinkedList.reversePrint();
+
+        //递归逆序打印
+        System.out.println("==========递归逆序打印====>");
+        singleLinkedList.recursionPrint(singleLinkedList.getHead().next,0);
+        //递归逆正序打印
+        System.out.println("==========递归逆序打印====>");
+        singleLinkedList.recursionPrint(singleLinkedList.getHead().next,1);
         System.out.println("=====================");
+
 
     }
 }
@@ -60,7 +75,6 @@ class HeroNode{
         this.nickName = nickName;
     }
 
-
     @Override
     public String toString() {
         return "HeroNode{" +
@@ -74,6 +88,10 @@ class HeroNode{
 
 class SingleLinkedList {
     private HeroNode head = new HeroNode(0, "", "");//头节点
+
+    public HeroNode getHead() {
+        return head;
+    }
 
     //找到最后一个节点，在这个节点上添加下一个节点为参数节点
     public void add(HeroNode heroNode) {
@@ -266,6 +284,44 @@ class SingleLinkedList {
     }
 
 
+    /**
+     * 通过栈实现逆序打印
+     */
+    public void reversePrint() {
+        //1.先遍历链表，将节点压入栈
+        HeroNode cur = head.next;
+        Stack<HeroNode> stack = new Stack<>();
+        while (cur != null) {
+            stack.push(cur);
+            cur = cur.next;
+        }
+
+        //2.遍历栈，先进后出的特点，依次打印
+        while(!stack.isEmpty()) {
+            HeroNode heroNode = stack.pop();
+            System.out.println(heroNode);
+        }
+    }
+
+
+    /**
+     * 递归打印
+     * @param heroNode
+     * @param order 1-正序 0-逆序
+     */
+    public void recursionPrint(HeroNode heroNode, int order) {
+        if (heroNode != null) {
+            if (order == 1) {
+                System.out.println(heroNode);
+            }
+            //前面先执行，再递归调用
+            recursionPrint(heroNode.next, order);
+            //递归调用返回后，才执行
+            if (order == 0) {
+                System.out.println(heroNode);
+            }
+        }
+    }
 }
 
 
