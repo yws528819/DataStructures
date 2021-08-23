@@ -3,15 +3,11 @@ package stack;
 public class Caculator {
     public static void main(String[] args) throws Exception {
         //表达式
-        String expression = "7*2+1-2/2";
+        String expression = "7*2+1-2/2+2";
         //数字栈
         ArrayStack2 numStack = new ArrayStack2(10);
         //符号栈
         ArrayStack2 operStack = new ArrayStack2(10);
-
-
-
-
 
         //遍历表达式，每个字符遍历处理
         for (int i = 0; i < expression.length(); i++) {
@@ -23,9 +19,9 @@ public class Caculator {
                 if (operStack.isEmpty()) {
                     operStack.push(ch);
                 }else {
-                    char peek = (char) numStack.peek();
-                    //符号栈里的栈顶元素优先级较高
-                    if (operStack.priority(peek) > numStack.priority(ch)) {
+                    char peek = (char) operStack.peek();
+                    //符号栈里的栈顶元素优先级较高或者一样，就计算
+                    if (operStack.priority(peek) >= operStack.priority(ch)) {
                         //符号栈顶出栈
                         operStack.pop();
                         //连续2次出栈数字栈元素，进行计算
@@ -33,6 +29,9 @@ public class Caculator {
                         int num2 = numStack.pop();
                         int res = numStack.cal(num1, num2, peek);
                         numStack.push(res);
+                        //符号字符入栈
+                        operStack.push(ch);
+                    }else {
                         //符号字符入栈
                         operStack.push(ch);
                     }
@@ -44,7 +43,7 @@ public class Caculator {
                     //数字栈是空的，直接入栈
                     numStack.push(Integer.parseInt(ch+""));
                 }else {
-                    if (!operStack.isOper(expression.charAt(i--))) {
+                    if (!operStack.isOper(expression.charAt(i - 1))) {
                         //如果上一个字符也是数字就拼接字符再入栈
                         String chs = numStack.pop() + "" + ch;
                         numStack.push(Integer.parseInt(chs));
@@ -57,12 +56,20 @@ public class Caculator {
             }
         }
 
-        // TODO: 2021/8/19 遍历完，还需要对栈里面剩余的符号进行计算
+        //遍历完，符号栈还有符号，应遍历计算完
+        while (!operStack.isEmpty()) {
+            // TODO: 2021/8/23 从栈底开始计算
 
+            //符号栈顶出栈
+            char operate = (char) operStack.pop();
+            //连续2次出栈数字栈元素，进行计算
+            int num1 = numStack.pop();
+            int num2 = numStack.pop();
+            int res = numStack.cal(num1, num2, operate);
+            numStack.push(res);
+        }
 
-
-
-
+        System.out.printf("表达式 %s = %d \n", expression, numStack.pop());
     }
 
 
