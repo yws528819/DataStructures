@@ -3,7 +3,7 @@ package stack;
 public class Caculator {
     public static void main(String[] args) throws Exception {
         //表达式
-        String expression = "7*2+1-2/2+2";
+        String expression = "7*2+1-2/2+2/2*3";
         //数字栈
         ArrayStack2 numStack = new ArrayStack2(10);
         //符号栈
@@ -57,19 +57,24 @@ public class Caculator {
         }
 
         //遍历完，符号栈还有符号，应遍历计算完
-        while (!operStack.isEmpty()) {
-            // TODO: 2021/8/23 从栈底开始计算
+        if (!operStack.isEmpty()) {
+            //栈倒置下
+            ArrayStack2 rOperStack = operStack.reverse();
+            ArrayStack2 rNumStack = numStack.reverse();
 
-            //符号栈顶出栈
-            char operate = (char) operStack.pop();
-            //连续2次出栈数字栈元素，进行计算
-            int num1 = numStack.pop();
-            int num2 = numStack.pop();
-            int res = numStack.cal(num1, num2, operate);
-            numStack.push(res);
+            while (!rOperStack.isEmpty()) {
+                //符号栈顶出栈
+                char operate = (char) rOperStack.pop();
+                //连续2次出栈数字栈元素，进行计算
+                int num1 = rNumStack.pop();
+                int num2 = rNumStack.pop();
+                int res = rNumStack.cal(num2, num1, operate);
+                rNumStack.push(res);
+            }
+            System.out.printf("表达式 %s = %d \n", expression, rNumStack.pop());
         }
 
-        System.out.printf("表达式 %s = %d \n", expression, numStack.pop());
+
     }
 
 
@@ -193,5 +198,19 @@ class ArrayStack2{
         }else {
             return 0;
         }
+    }
+
+    /**
+     * 栈逆向转成新栈，栈底变栈顶
+     * @return
+     */
+    public ArrayStack2 reverse() throws Exception {
+        ArrayStack2 stack2 = new ArrayStack2(maxSize);
+
+        while(!isEmpty()) {
+            stack2.push(pop());
+        }
+
+        return stack2;
     }
 }
