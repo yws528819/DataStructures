@@ -3,7 +3,7 @@ package stack;
 public class Caculator {
     public static void main(String[] args) throws Exception {
         //表达式
-        String expression = "7*2+1-2/2+2/2*3";
+        String expression = "17*2+1-10/2+2/2*3+2*11/2";
         //数字栈
         ArrayStack2 numStack = new ArrayStack2(10);
         //符号栈
@@ -53,9 +53,32 @@ public class Caculator {
                     }
                 }
 
+                // *********兼容遍历完后，最后一个符号刚好是*或者/，此时前面入栈后，不会触发计算操作，下面重新触发计算**************
+                // *********1  1  2    (遍历完后的样子)***********
+                // *********  +  *
+                // *********所以遍历完后，优先把1*2计算掉，再做最后的遍历
+                //最后一个数字
+                if (i == expression.length()-1) {
+                    //判断最后的运算符是是否是* 或者 /
+                    char lastOper = (char) operStack.peek();
+                    if (operStack.priority(lastOper) == 1) {
+                        //再次优先算一下栈顶的2个数字
+                        //符号栈顶出栈
+                        operStack.pop();
+                        //连续2次出栈数字栈元素，进行计算
+                        int num1 = numStack.pop();
+                        int num2 = numStack.pop();
+                        int res = numStack.cal(num1, num2, lastOper);
+                        numStack.push(res);
+                    }
+                }
+                //**********************************************
+
             }
         }
 
+        // *********兼容遍历完后，加法和减法也存在顺序执行问题，所以将整个栈倒置，再从栈顶开始计算**************
+        // *********比如：10-1+2 = 9  如果不倒置直接从栈顶触发计算变成：10-(1+2) = 7 ×
         //遍历完，符号栈还有符号，应遍历计算完
         if (!operStack.isEmpty()) {
             //栈倒置下
@@ -73,6 +96,7 @@ public class Caculator {
             }
             System.out.printf("表达式 %s = %d \n", expression, rNumStack.pop());
         }
+        //**********************************************
 
 
     }
