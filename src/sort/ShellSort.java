@@ -25,8 +25,13 @@ public class ShellSort {
 
 
     public static void shellSort(int[] arr) {
+        //用整除2直到0得到不同的步长
         for(int step = arr.length / 2; step > 0; step /= 2) {
-
+            //每个步长对应的数组进行插入排序
+            //比如8个数的数组
+            // 步长4，数组分别为：(0,4)(1,5)(2,6)(3,7)
+            // 步长2，数组分别为：(0,2,4,6)(1,3,5,7)
+            //以下插入排序，起始下标都是1，跟左侧比较进行移位，跟插入排序一样
             for (int j=step; j<arr.length; j++) {
                 int temp = arr[j];
                 int cmpIndex = j-step;
@@ -41,5 +46,4 @@ public class ShellSort {
             }
         }
     }
-
 }
