@@ -8,20 +8,33 @@ public class BinaryTreeDemo {
         HeroNode heroNode1 = new HeroNode(2, "吴用");
         HeroNode heroNode2 = new HeroNode(3, "卢俊义");
         HeroNode heroNode3 = new HeroNode(4, "林冲");
+        HeroNode heroNode4 = new HeroNode(5, "关胜");
 
         binaryTree.setRoot(rootNode);
         rootNode.setLeftNode(heroNode1);
         rootNode.setRightNode(heroNode2);
         heroNode2.setRightNode(heroNode3);
+        heroNode2.setLeftNode(heroNode4);
 
-        System.out.println("前序遍历：");
+        // System.out.println("前序遍历：");
+        // binaryTree.preOrder();
+        // System.out.println("中序遍历：");
+        // binaryTree.midOrder();
+        // System.out.println("后序遍历：");
+        // binaryTree.postOrder();
+
+        // System.out.println("前序遍历查找：");
+        // binaryTree.preOrderSearch(5);
+        // System.out.println("中序遍历查找：");
+        // binaryTree.midOrderSearch(5);
+        // System.out.println("后序遍历查找：");
+        // binaryTree.postOrderSearch(5);
+
+        System.out.println("删除前，前序遍历：");
         binaryTree.preOrder();
-        System.out.println("中序遍历：");
-        binaryTree.midOrder();
-        System.out.println("后序遍历：");
-        binaryTree.postOrder();
-
-
+        binaryTree.delNode(5);
+        System.out.println("删除后，前序遍历");
+        binaryTree.preOrder();
     }
 
 }
@@ -52,6 +65,59 @@ class BinaryTree{
     public void postOrder() {
         if (root != null) {
             root.postOrder();
+        }
+    }
+
+
+    public void preOrderSearch(int no) {
+        if(root == null) {
+            return;
+        }
+        HeroNode heroNode = root.preOrderSearch(no);
+        if(heroNode != null) {
+            System.out.printf("编号%d为%s", no, heroNode.getName());
+        }else {
+            System.out.printf("找不到编号%d", no);
+        }
+        System.out.println();
+    }
+    public void midOrderSearch(int no) {
+        if(root == null) {
+            return;
+        }
+        HeroNode heroNode = root.midOrderSearch(no);
+        if(heroNode != null) {
+            System.out.printf("编号%d为%s", no, heroNode.getName());
+        }else {
+            System.out.printf("找不到编号%d", no);
+        }
+        System.out.println();
+
+    }
+    public void postOrderSearch(int no) {
+        if(root == null) {
+            return;
+        }
+        HeroNode heroNode = root.postOrderSearch(no);
+        if(heroNode != null) {
+            System.out.printf("编号%d为%s", no, heroNode.getName());
+        }else {
+            System.out.printf("找不到编号%d", no);
+        }
+        System.out.println();
+    }
+
+    public void delNode(int no) {
+        if (root != null) {
+            //父节点刚好是
+            if (root.getNo() == no) {
+                root = null;
+            }else {
+                //递归子节点，只能通过父节点去删除子节点
+                root.delNode(no);
+            }
+        }else {
+            System.out.println("空树不能删除");
         }
     }
 
@@ -152,6 +218,7 @@ class HeroNode{
 
 
     public HeroNode preOrderSearch(int no) {
+        System.out.println("遍历次数~");
         if (this.getNo() == no) {
             return this;
         }
@@ -182,7 +249,7 @@ class HeroNode{
         if (res != null) {
             return res;
         }
-
+        System.out.println("遍历次数~");
         if (this.getNo() == no) {
             return this;
         }
@@ -211,7 +278,7 @@ class HeroNode{
         if (res != null) {
             return res;
         }
-
+        System.out.println("遍历次数~");
         if (this.getNo() == no) {
             return this;
         }
@@ -219,6 +286,28 @@ class HeroNode{
         return res;
     }
 
+
+    /**
+     * 删除树节点
+     * @param no
+     */
+    public void delNode(int no) {
+        if (this.getLeftNode() != null && this.getLeftNode().getNo() == no) {
+            this.setLeftNode(null);
+            return;
+        }
+        if (this.getRightNode() != null && this.getRightNode().getNo() == no) {
+            this.setRightNode(null);
+            return;
+        }
+
+        if (this.getLeftNode() != null) {
+            this.getLeftNode().delNode(no);
+        }
+        if (this.getRightNode() != null) {
+            this.getRightNode().delNode(no);
+        }
+    }
 
 
 }
