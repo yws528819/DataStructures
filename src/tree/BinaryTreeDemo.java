@@ -39,6 +39,7 @@ public class BinaryTreeDemo {
 
 }
 
+//二叉树
 class BinaryTree{
     private HeroNode root;
 
@@ -50,25 +51,27 @@ class BinaryTree{
         this.root = root;
     }
 
-
+    //前序遍历（对外，还是由二叉树提供）
     public void preOrder() {
         if (root != null)
             root.preOrder();
     }
 
+    //中序遍历（对外，还是由二叉树提供）
     public void midOrder() {
         if (root != null) {
             root.midOrder();
         }
     }
 
+    //后序遍历（对外，还是由二叉树提供）
     public void postOrder() {
         if (root != null) {
             root.postOrder();
         }
     }
 
-
+    //前序遍历查找（对外，还是由二叉树提供）
     public void preOrderSearch(int no) {
         if(root == null) {
             return;
@@ -81,6 +84,8 @@ class BinaryTree{
         }
         System.out.println();
     }
+
+    //中序遍历查找（对外，还是由二叉树提供）
     public void midOrderSearch(int no) {
         if(root == null) {
             return;
@@ -94,6 +99,8 @@ class BinaryTree{
         System.out.println();
 
     }
+
+    //后序遍历查找（对外，还是由二叉树提供）
     public void postOrderSearch(int no) {
         if(root == null) {
             return;
@@ -107,6 +114,7 @@ class BinaryTree{
         System.out.println();
     }
 
+    //删除树节点（对外，还是由二叉树提供）
     public void delNode(int no) {
         if (root != null) {
             //父节点刚好是
@@ -125,7 +133,7 @@ class BinaryTree{
 
 
 
-
+//树节点
 class HeroNode{
     private int no;
     private String name;
@@ -217,6 +225,11 @@ class HeroNode{
     }
 
 
+    /**
+     * 前序遍历查找
+     * @param no
+     * @return
+     */
     public HeroNode preOrderSearch(int no) {
         System.out.println("遍历次数~");
         if (this.getNo() == no) {
@@ -239,7 +252,11 @@ class HeroNode{
         return res;
     }
 
-
+    /**
+     * 中序遍历查找
+     * @param no
+     * @return
+     */
     public HeroNode midOrderSearch(int no) {
         HeroNode res = null;
         if (this.getLeftNode() != null) {
@@ -261,6 +278,11 @@ class HeroNode{
         return res;
     }
 
+    /**
+     * 后序遍历查找
+     * @param no
+     * @return
+     */
     public HeroNode postOrderSearch(int no) {
         HeroNode res = null;
         if (this.getLeftNode() != null) {
@@ -308,6 +330,4 @@ class HeroNode{
             this.getRightNode().delNode(no);
         }
     }
-
-
 }

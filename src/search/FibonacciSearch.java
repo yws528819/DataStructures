@@ -67,7 +67,7 @@ public class FibonacciSearch {
                 //这里查找的值在f[k-2]里，类推公式及f[k-2] = f[k-3] + f[k-4]
                 //推算mid应为 k 用k-1代替
                 //mid = low + f[(k-2)-1] - 1;
-                k =-2;
+                k-=2;
             }else {
                 if (mid <= high) {
                     return mid;
