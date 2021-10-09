@@ -3,18 +3,92 @@ package huffmancode;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * 赫夫曼编码
+ */
 public class HuffmanCode {
 
-    private static Map<Byte, String> huffmanCodeMap = new HashMap<>();
-    private static StringBuilder stringBuilder = new StringBuilder();
+    public static Map<Byte, String> huffmanCodeMap = new HashMap<>();
+    public static StringBuilder stringBuilder = new StringBuilder();
 
 
     public static void main(String[] args) {
-        String content = "i like like like java do you like a java";
+
+        String content = "i like like like java do you like a java !!!!!!!";
+        //赫夫曼压缩处理
         byte[] bytes = huffmanZip(content.getBytes());
         System.out.println(Arrays.toString(bytes));
+
+        //赫夫曼解压处理
+        Byte[] srcBytes = decode(bytes, huffmanCodeMap);
+        byte[] srcb = new byte[srcBytes.length];
+        int i=0;
+        for(Byte b : srcBytes) {
+            srcb[i] = (byte) b;
+            i++;
+        }
+        System.out.println(new String(srcb));
     }
 
+
+    /**
+     * 赫夫曼字节数组根据赫夫曼编码，还原成原字节数组
+     * @param huffmanBytes 赫夫曼字节数组
+     * @param huffmanCodes 赫夫曼编码
+     * @return
+     */
+    public static Byte[] decode(byte[] huffmanBytes, Map<Byte, String> huffmanCodes) {
+        //压缩的字节数组，还原成二进制字符串
+        String huffmanStr = bytesToBitString(huffmanBytes);
+
+        //赫夫曼编码的键值对调
+        Map<String, Byte> map = new HashMap<>();
+        for(Map.Entry<Byte, String> entry : huffmanCodes.entrySet()) {
+            map.put(entry.getValue(), entry.getKey());
+        }
+
+        StringBuilder sbd = new StringBuilder();
+        List<Byte> list = new ArrayList();
+        for(int i=0; i<huffmanStr.length(); i++) {
+            sbd.append(huffmanStr.substring(i, i + 1));
+            Byte aByte = map.get(sbd.toString());
+            if (aByte != null) {
+                list.add(aByte);
+                sbd = new StringBuilder();
+            }
+        }
+
+        return list.toArray(new Byte[list.size()]);
+    }
+
+    /**
+     * 压缩的字节数组，还原成二进制字符串
+     * @param huffmanBytes
+     * @return
+     */
+    public static String bytesToBitString(byte[] huffmanBytes) {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i< huffmanBytes.length-2; i++) {
+            int b = huffmanBytes[i] | 256;
+            String s = Integer.toBinaryString(b);
+            sb.append(s.substring(s.length() - 8));
+        }
+        //最后一个字节，代表最后倒数第二个字节（真正意义的最后一个字节）的长度
+        int lastByteLength = huffmanBytes[huffmanBytes.length - 1];
+        String lastByte = Integer.toBinaryString(huffmanBytes[huffmanBytes.length-2]);
+        for (int i=0; i<(lastByteLength-lastByte.length()); i++ ) {
+            lastByte = "0" + lastByte;
+        }
+        sb.append(lastByte);
+        return sb.toString();
+    }
+
+
+    /**
+     * 赫夫曼压缩处理
+     * @param bytes
+     * @return
+     */
     public static byte[] huffmanZip(byte[] bytes) {
         //将字符串转成结点对象集合，Node(字符，字符出现次数)
         List<Node> nodes = getNodes(bytes);
@@ -54,13 +128,16 @@ public class HuffmanCode {
             len = stringBuilder.length() / 8 + 1;
         }
         //返回的字节数组
-        byte[] retBytes = new byte[len];
+        byte[] retBytes = new byte[len+1];
         int index = 0;
+        int lastByteLen = 0;
         //每8位（1字节）转成1个10进制数
         for (int i=0; i<stringBuilder.length(); i+=8) {
             String strByte;
             if (i+8 > stringBuilder.length()) {
                 strByte = stringBuilder.substring(i);
+                //最后剩余的一个字节，记录下长度
+                lastByteLen = (byte) (stringBuilder.length() - i);
             }else {
                 strByte = stringBuilder.substring(i, i+8);
             }
@@ -68,6 +145,8 @@ public class HuffmanCode {
             retBytes[index] = (byte) Integer.parseInt(strByte, 2);
             index ++;
         }
+
+        retBytes[index] = (byte) lastByteLen;
 
         return retBytes;
     }
