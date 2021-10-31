@@ -46,16 +46,16 @@ public class KnapsackProblem {
 		//	}
 		//}
 
-        //动脑筋
-        //int i = path.length - 1; //行的最大下标
-        //int j = path[0].length - 1;  //列的最大下标
-        //while(i > 0 && j > 0 ) { //从path的最后开始找
-        //    if(path[i][j] == 1) {
-        //        System.out.printf("第%d个商品放入到背包\n", i);
-        //        j -= w[i-1]; //w[i-1]
-        //    }
-        //    i--;
-        //}
+        //动脑筋（这里好像只打出了除了第1个之外放入背包的商品）
+        int i = path.length - 1; //行的最大下标
+        int j = path[0].length - 1;  //列的最大下标
+        while(i > 0 && j > 0 ) { //从path的最后开始找
+           if(path[i][j] == 1) {
+               System.out.printf("第%d个商品放入到背包\n", i);
+               j -= w[i-1]; //w[i-1]
+           }
+           i--;
+        }
 
 
     }
