@@ -2,6 +2,10 @@ package com.yws.dijkstra;
 
 import java.util.Arrays;
 
+/**
+ * 克鲁斯卡尔算法
+ * 求出某一个顶点，到其他顶点的最小路径
+ */
 public class DijkstraAlgorithm {
 
     public static void main(String[] args) {
@@ -56,13 +60,57 @@ class Graph {
 
 
     public void dijk(int index) {
+        //按给定的初始顶点，更新与各顶点的距离
         update(index);
 
+        //按其他顶点，一一更新，初始顶点与各顶点的距离
         for (int j=1; j<vertex.length; j++) {
             index = getNextIndex();
             update(index);
         }
     }
+
+
+
+    /**
+     * 通过跟初始顶点直接关联的顶点，也变相统计出了间接关联的顶点的距离
+     * @param index
+     */
+    private void update(int index) {
+        //比如按G顶点为初始顶点，这里index假设是B顶点
+        int len = 0;
+        for (int j=0; j<matrix[index].length; j++) {
+            //这里是GB（可能是GB或者GA+GB） 加上 BC  如果小于  GC，就更新GC距离为（GB+BC）
+            len = dis[index] + matrix[index][j];
+
+            if (already_arr[j] == 0 && len < dis[j]) {
+                dis[j] = len;
+                pre_arr[j] = index;
+            }
+        }
+
+
+    }
+
+    /**
+     * 这里去跟初始顶点，直接相连的顶点，按距离从小到大依次拿到未访问的顶点
+     * @return
+     */
+    private int getNextIndex() {
+        int len = 65535;
+        int index = 0;
+        for (int i=0; i<vertex.length; i++) {
+            if (already_arr[i] == 0 && dis[i] < len) {
+                len = dis[i];
+                index = i;
+            }
+        }
+
+        already_arr[index] = 1;
+        return index;
+    }
+
+
 
     public void showDijkstra() {
         System.out.println("==========================");
@@ -93,39 +141,5 @@ class Graph {
             count++;
         }
         System.out.println();
-    }
-
-
-
-
-
-    private void update(int index) {
-        int len = 0;
-        for (int j=0; j<matrix[index].length; j++) {
-
-            len = dis[index] + matrix[index][j];
-
-            if (already_arr[j] == 0 && len < dis[j]) {
-                dis[j] = len;
-                pre_arr[j] = index;
-            }
-        }
-
-
-    }
-
-
-    private int getNextIndex() {
-        int len = 65535;
-        int index = 0;
-        for (int i=0; i<vertex.length; i++) {
-            if (already_arr[i] == 0 && dis[i] < len) {
-                len = dis[i];
-                index = i;
-            }
-        }
-
-        already_arr[index] = 1;
-        return index;
     }
 }
